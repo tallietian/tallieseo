@@ -1,0 +1,224 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const isZh = post.data.lang === 'zh';
+---
+
+<Layout title={`${post.data.title} — TallieSEO`} lang={post.data.lang}>
+  <Nav lang={post.data.lang} />
+
+  <article class="blog-post">
+    <div class="post-inner">
+      <div class="post-header">
+        <a href={isZh ? '/zh/#services' : '/#services'} class="back-link">
+          ← {isZh ? '返回' : 'Back'}
+        </a>
+        <div class="post-meta">
+          <span class="post-date">
+            {post.data.date.toLocaleDateString(isZh ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </span>
+          <span class="post-author">{post.data.author}</span>
+        </div>
+        <h1 class="post-title">{post.data.title}</h1>
+        <p class="post-desc">{post.data.description}</p>
+        <div class="post-tags">
+          {post.data.tags.map((tag: string) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+      <div class="post-content">
+        <Content />
+      </div>
+      <div class="post-footer">
+        <div class="post-cta">
+          <h3>{isZh ? '需要专业的外贸推广支持？' : 'Need professional trade marketing support?'}</h3>
+          <p>{isZh ? '联系TallieSEO团队，获取免费咨询。' : 'Contact TallieSEO for a free consultation.'}</p>
+          <a href={isZh ? '/zh/#contact' : '/#contact'} class="btn-primary">
+            {isZh ? '立即咨询' : 'Get Started'} →
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <Footer lang={post.data.lang} />
+</Layout>
+
+<style>
+  .blog-post {
+    padding-top: 6rem;
+  }
+  .post-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--c-text-muted);
+    margin-bottom: 2rem;
+    transition: color 0.3s;
+  }
+  .back-link:hover {
+    color: var(--c-accent);
+  }
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--c-text-muted);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .post-title {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .post-desc {
+    font-size: 1.1rem;
+    color: var(--c-text-dim);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--c-border);
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--c-border);
+    border-radius: 100px;
+    color: var(--c-accent);
+  }
+
+  /* Article content styling */
+  .post-content {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--c-text-dim);
+  }
+  .post-content :global(h2) {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--c-text);
+    margin: 3rem 0 1.2rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .post-content :global(h3) {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--c-text);
+    margin: 2rem 0 0.8rem;
+  }
+  .post-content :global(p) {
+    margin-bottom: 1.4rem;
+  }
+  .post-content :global(strong) {
+    color: var(--c-text);
+    font-weight: 600;
+  }
+  .post-content :global(a) {
+    color: var(--c-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.3s;
+  }
+  .post-content :global(a:hover) {
+    opacity: 0.8;
+  }
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin: 1rem 0 1.4rem 1.5rem;
+  }
+  .post-content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+  .post-content :global(blockquote) {
+    border-left: 3px solid var(--c-accent);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background: var(--c-surface);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+  }
+  .post-content :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--c-surface);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--c-border);
+  }
+
+  /* CTA at bottom */
+  .post-footer {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--c-border);
+  }
+  .post-cta {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    text-align: center;
+  }
+  .post-cta h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.6rem;
+  }
+  .post-cta p {
+    color: var(--c-text-dim);
+    margin-bottom: 1.5rem;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    background: var(--c-accent);
+    color: var(--c-bg);
+    padding: 0.8rem 2rem;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    font-family: var(--font-body);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(200, 255, 0, 0.25);
+  }
+
+  @media (max-width: 768px) {
+    .post-inner { padding: 1.2rem; }
+    .post-cta { padding: 1.8rem; }
+  }
+</style>
