@@ -1,0 +1,119 @@
+---
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+const isEn = lang === 'en';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="footer-logo"><span class="mark">◈</span> TallieSEO</span>
+        <p class="footer-tagline">{isEn ? 'Your Growth Partner for Global Trade' : '您的全球贸易增长伙伴'}</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>{isEn ? 'Services' : '服务'}</h4>
+          <a href={isEn ? '/#services' : '/zh/#services'}>{isEn ? 'Website Development' : '外贸建站'}</a>
+          <a href={isEn ? '/#services' : '/zh/#services'}>{isEn ? 'SEO Optimization' : 'SEO优化'}</a>
+          <a href={isEn ? '/#services' : '/zh/#services'}>{isEn ? 'Ads Management' : '广告投放'}</a>
+          <a href={isEn ? '/#services' : '/zh/#services'}>{isEn ? 'Social Marketing' : '社媒营销'}</a>
+        </div>
+        <div class="footer-col">
+          <h4>{isEn ? 'Contact' : '联系'}</h4>
+          <a href="mailto:hello@tallieseo.com">hello@tallieseo.com</a>
+          <a href={isEn ? '/#contact' : '/zh/#contact'}>{isEn ? 'Get a Quote' : '获取报价'}</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© {year} TallieSEO. {isEn ? 'All rights reserved.' : '保留所有权利。'}</p>
+      <a href={isEn ? '/zh/' : '/'} class="footer-lang">{isEn ? '中文版' : 'English'}</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--c-border);
+    padding: 4rem 2rem 2rem;
+    background: var(--c-bg);
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 4rem;
+    margin-bottom: 3rem;
+  }
+  .footer-logo {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  .mark { color: var(--c-accent); }
+  .footer-tagline {
+    margin-top: 0.8rem;
+    color: var(--c-text-dim);
+    font-size: 0.9rem;
+  }
+  .footer-links {
+    display: flex;
+    gap: 4rem;
+  }
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-accent);
+    margin-bottom: 0.4rem;
+  }
+  .footer-col a {
+    font-size: 0.9rem;
+    color: var(--c-text-dim);
+    transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--c-text); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--c-border);
+    font-size: 0.8rem;
+    color: var(--c-text-muted);
+  }
+  .footer-lang {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--c-border);
+    border-radius: 4px;
+    color: var(--c-text-dim);
+    transition: all 0.3s;
+  }
+  .footer-lang:hover {
+    border-color: var(--c-accent);
+    color: var(--c-accent);
+  }
+  @media (max-width: 768px) {
+    .footer-top {
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+    .footer-links { gap: 2.5rem; }
+    .footer { padding: 3rem 1.2rem 1.5rem; }
+  }
+</style>
